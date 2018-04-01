@@ -308,7 +308,7 @@ namespace TwitchBot
 
         }
 
-        private void bunifuFlatButton1_Click(object sender, EventArgs e)
+        private void joinButton_Click_1(object sender, EventArgs e)
         {
             if (channelTextBox.Text != string.Empty)
             {
@@ -324,6 +324,16 @@ namespace TwitchBot
         private void openConfigFolderButton_Click(object sender, EventArgs e)
         {
             BotEntry.Storage.OpenInNativeExplorer();
+        }
+
+        private void textBox1_TextChanged_1(object sender, EventArgs e)
+        {
+
+        }
+
+        private void UsernameTextBox_TextChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }

@@ -29,7 +29,6 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(DialogWindow));
             this.moduleCheckBox = new System.Windows.Forms.CheckBox();
             this.moduleReloadButton = new System.Windows.Forms.Button();
             this.ModuleName = new System.Windows.Forms.Label();
@@ -47,13 +46,13 @@
             this.sendButton = new System.Windows.Forms.Button();
             this.messageTextBox = new System.Windows.Forms.TextBox();
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.openConfigFolderButton = new System.Windows.Forms.Button();
+            this.OATokenTextBox = new System.Windows.Forms.TextBox();
+            this.UsernameTextBox = new System.Windows.Forms.TextBox();
+            this.joinButton = new System.Windows.Forms.Button();
+            this.channelTextBox = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
-            this.OATokenTextBox = new Bunifu.Framework.UI.BunifuMetroTextbox();
-            this.UsernameTextBox = new Bunifu.Framework.UI.BunifuMetroTextbox();
-            this.openConfigFolderButton = new Bunifu.Framework.UI.BunifuFlatButton();
-            this.joinButton = new Bunifu.Framework.UI.BunifuFlatButton();
-            this.channelTextBox = new Bunifu.Framework.UI.BunifuMetroTextbox();
             this.connectButton = new System.Windows.Forms.Button();
             this.connectionStateLabel = new System.Windows.Forms.Label();
             this.constConnectionStateLabel = new System.Windows.Forms.Label();
@@ -221,13 +220,13 @@
             // tabPage1
             // 
             this.tabPage1.BackColor = System.Drawing.Color.White;
-            this.tabPage1.Controls.Add(this.label3);
-            this.tabPage1.Controls.Add(this.label1);
+            this.tabPage1.Controls.Add(this.openConfigFolderButton);
             this.tabPage1.Controls.Add(this.OATokenTextBox);
             this.tabPage1.Controls.Add(this.UsernameTextBox);
-            this.tabPage1.Controls.Add(this.openConfigFolderButton);
             this.tabPage1.Controls.Add(this.joinButton);
             this.tabPage1.Controls.Add(this.channelTextBox);
+            this.tabPage1.Controls.Add(this.label3);
+            this.tabPage1.Controls.Add(this.label1);
             this.tabPage1.Controls.Add(this.connectButton);
             this.tabPage1.Controls.Add(this.connectionStateLabel);
             this.tabPage1.Controls.Add(this.constConnectionStateLabel);
@@ -238,6 +237,53 @@
             this.tabPage1.Size = new System.Drawing.Size(1000, 535);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Main Settings";
+            // 
+            // openConfigFolderButton
+            // 
+            this.openConfigFolderButton.BackColor = System.Drawing.Color.NavajoWhite;
+            this.openConfigFolderButton.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.openConfigFolderButton.Location = new System.Drawing.Point(841, 6);
+            this.openConfigFolderButton.Name = "openConfigFolderButton";
+            this.openConfigFolderButton.Size = new System.Drawing.Size(151, 28);
+            this.openConfigFolderButton.TabIndex = 17;
+            this.openConfigFolderButton.Text = "Open Config Folder";
+            this.openConfigFolderButton.UseVisualStyleBackColor = false;
+            // 
+            // OATokenTextBox
+            // 
+            this.OATokenTextBox.Location = new System.Drawing.Point(107, 112);
+            this.OATokenTextBox.Name = "OATokenTextBox";
+            this.OATokenTextBox.Size = new System.Drawing.Size(344, 20);
+            this.OATokenTextBox.TabIndex = 16;
+            this.OATokenTextBox.UseSystemPasswordChar = true;
+            // 
+            // UsernameTextBox
+            // 
+            this.UsernameTextBox.Location = new System.Drawing.Point(107, 65);
+            this.UsernameTextBox.Name = "UsernameTextBox";
+            this.UsernameTextBox.Size = new System.Drawing.Size(344, 20);
+            this.UsernameTextBox.TabIndex = 15;
+            this.UsernameTextBox.TextChanged += new System.EventHandler(this.UsernameTextBox_TextChanged);
+            // 
+            // joinButton
+            // 
+            this.joinButton.BackColor = System.Drawing.Color.NavajoWhite;
+            this.joinButton.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.joinButton.Location = new System.Drawing.Point(470, 16);
+            this.joinButton.Name = "joinButton";
+            this.joinButton.Size = new System.Drawing.Size(47, 20);
+            this.joinButton.TabIndex = 14;
+            this.joinButton.Text = "Join";
+            this.joinButton.UseVisualStyleBackColor = false;
+            this.joinButton.Click += new System.EventHandler(this.joinButton_Click_1);
+            // 
+            // channelTextBox
+            // 
+            this.channelTextBox.Location = new System.Drawing.Point(107, 16);
+            this.channelTextBox.Name = "channelTextBox";
+            this.channelTextBox.Size = new System.Drawing.Size(344, 20);
+            this.channelTextBox.TabIndex = 13;
+            this.channelTextBox.TextChanged += new System.EventHandler(this.textBox1_TextChanged_1);
             // 
             // label3
             // 
@@ -260,129 +306,6 @@
             this.label1.Size = new System.Drawing.Size(83, 20);
             this.label1.TabIndex = 11;
             this.label1.Text = "Username";
-            // 
-            // OATokenTextBox
-            // 
-            this.OATokenTextBox.BorderColorFocused = System.Drawing.Color.Blue;
-            this.OATokenTextBox.BorderColorIdle = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.OATokenTextBox.BorderColorMouseHover = System.Drawing.Color.Blue;
-            this.OATokenTextBox.BorderThickness = 3;
-            this.OATokenTextBox.Cursor = System.Windows.Forms.Cursors.IBeam;
-            this.OATokenTextBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F);
-            this.OATokenTextBox.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.OATokenTextBox.isPassword = true;
-            this.OATokenTextBox.Location = new System.Drawing.Point(107, 102);
-            this.OATokenTextBox.Margin = new System.Windows.Forms.Padding(4);
-            this.OATokenTextBox.Name = "OATokenTextBox";
-            this.OATokenTextBox.Size = new System.Drawing.Size(344, 41);
-            this.OATokenTextBox.TabIndex = 10;
-            this.OATokenTextBox.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
-            // 
-            // UsernameTextBox
-            // 
-            this.UsernameTextBox.BorderColorFocused = System.Drawing.Color.Blue;
-            this.UsernameTextBox.BorderColorIdle = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.UsernameTextBox.BorderColorMouseHover = System.Drawing.Color.Blue;
-            this.UsernameTextBox.BorderThickness = 3;
-            this.UsernameTextBox.Cursor = System.Windows.Forms.Cursors.IBeam;
-            this.UsernameTextBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F);
-            this.UsernameTextBox.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.UsernameTextBox.isPassword = false;
-            this.UsernameTextBox.Location = new System.Drawing.Point(107, 53);
-            this.UsernameTextBox.Margin = new System.Windows.Forms.Padding(4);
-            this.UsernameTextBox.Name = "UsernameTextBox";
-            this.UsernameTextBox.Size = new System.Drawing.Size(344, 41);
-            this.UsernameTextBox.TabIndex = 9;
-            this.UsernameTextBox.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
-            // 
-            // openConfigFolderButton
-            // 
-            this.openConfigFolderButton.Activecolor = System.Drawing.Color.FromArgb(((int)(((byte)(46)))), ((int)(((byte)(139)))), ((int)(((byte)(87)))));
-            this.openConfigFolderButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(46)))), ((int)(((byte)(139)))), ((int)(((byte)(87)))));
-            this.openConfigFolderButton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.openConfigFolderButton.BorderRadius = 0;
-            this.openConfigFolderButton.ButtonText = "Open Configs Folder";
-            this.openConfigFolderButton.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.openConfigFolderButton.DisabledColor = System.Drawing.Color.Gray;
-            this.openConfigFolderButton.Iconcolor = System.Drawing.Color.Transparent;
-            this.openConfigFolderButton.Iconimage = ((System.Drawing.Image)(resources.GetObject("openConfigFolderButton.Iconimage")));
-            this.openConfigFolderButton.Iconimage_right = null;
-            this.openConfigFolderButton.Iconimage_right_Selected = null;
-            this.openConfigFolderButton.Iconimage_Selected = null;
-            this.openConfigFolderButton.IconMarginLeft = 0;
-            this.openConfigFolderButton.IconMarginRight = 0;
-            this.openConfigFolderButton.IconRightVisible = false;
-            this.openConfigFolderButton.IconRightZoom = 0D;
-            this.openConfigFolderButton.IconVisible = false;
-            this.openConfigFolderButton.IconZoom = 90D;
-            this.openConfigFolderButton.IsTab = false;
-            this.openConfigFolderButton.Location = new System.Drawing.Point(753, 7);
-            this.openConfigFolderButton.Name = "openConfigFolderButton";
-            this.openConfigFolderButton.Normalcolor = System.Drawing.Color.FromArgb(((int)(((byte)(46)))), ((int)(((byte)(139)))), ((int)(((byte)(87)))));
-            this.openConfigFolderButton.OnHovercolor = System.Drawing.Color.FromArgb(((int)(((byte)(36)))), ((int)(((byte)(129)))), ((int)(((byte)(77)))));
-            this.openConfigFolderButton.OnHoverTextColor = System.Drawing.Color.White;
-            this.openConfigFolderButton.selected = false;
-            this.openConfigFolderButton.Size = new System.Drawing.Size(239, 41);
-            this.openConfigFolderButton.TabIndex = 8;
-            this.openConfigFolderButton.Text = "Open Configs Folder";
-            this.openConfigFolderButton.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.openConfigFolderButton.Textcolor = System.Drawing.Color.White;
-            this.openConfigFolderButton.TextFont = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.openConfigFolderButton.Click += new System.EventHandler(this.openConfigFolderButton_Click);
-            // 
-            // joinButton
-            // 
-            this.joinButton.Activecolor = System.Drawing.Color.FromArgb(((int)(((byte)(46)))), ((int)(((byte)(139)))), ((int)(((byte)(87)))));
-            this.joinButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(46)))), ((int)(((byte)(139)))), ((int)(((byte)(87)))));
-            this.joinButton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.joinButton.BorderRadius = 0;
-            this.joinButton.ButtonText = "Join";
-            this.joinButton.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.joinButton.DisabledColor = System.Drawing.Color.Gray;
-            this.joinButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 6F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.joinButton.Iconcolor = System.Drawing.Color.Transparent;
-            this.joinButton.Iconimage = global::TwitchBot.Properties.Resources.fa_connected;
-            this.joinButton.Iconimage_right = null;
-            this.joinButton.Iconimage_right_Selected = null;
-            this.joinButton.Iconimage_Selected = null;
-            this.joinButton.IconMarginLeft = 0;
-            this.joinButton.IconMarginRight = 0;
-            this.joinButton.IconRightVisible = false;
-            this.joinButton.IconRightZoom = 0D;
-            this.joinButton.IconVisible = false;
-            this.joinButton.IconZoom = 90D;
-            this.joinButton.IsTab = false;
-            this.joinButton.Location = new System.Drawing.Point(457, 7);
-            this.joinButton.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
-            this.joinButton.Name = "joinButton";
-            this.joinButton.Normalcolor = System.Drawing.Color.FromArgb(((int)(((byte)(46)))), ((int)(((byte)(139)))), ((int)(((byte)(87)))));
-            this.joinButton.OnHovercolor = System.Drawing.Color.FromArgb(((int)(((byte)(36)))), ((int)(((byte)(129)))), ((int)(((byte)(77)))));
-            this.joinButton.OnHoverTextColor = System.Drawing.Color.White;
-            this.joinButton.selected = false;
-            this.joinButton.Size = new System.Drawing.Size(42, 41);
-            this.joinButton.TabIndex = 7;
-            this.joinButton.Text = "Join";
-            this.joinButton.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.joinButton.Textcolor = System.Drawing.Color.White;
-            this.joinButton.TextFont = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.joinButton.Click += new System.EventHandler(this.bunifuFlatButton1_Click);
-            // 
-            // channelTextBox
-            // 
-            this.channelTextBox.BorderColorFocused = System.Drawing.Color.Blue;
-            this.channelTextBox.BorderColorIdle = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.channelTextBox.BorderColorMouseHover = System.Drawing.Color.Blue;
-            this.channelTextBox.BorderThickness = 3;
-            this.channelTextBox.Cursor = System.Windows.Forms.Cursors.IBeam;
-            this.channelTextBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F);
-            this.channelTextBox.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.channelTextBox.isPassword = false;
-            this.channelTextBox.Location = new System.Drawing.Point(107, 7);
-            this.channelTextBox.Margin = new System.Windows.Forms.Padding(4);
-            this.channelTextBox.Name = "channelTextBox";
-            this.channelTextBox.Size = new System.Drawing.Size(344, 41);
-            this.channelTextBox.TabIndex = 6;
-            this.channelTextBox.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
             // 
             // connectButton
             // 
@@ -475,18 +398,18 @@
         public System.Windows.Forms.Button sendButton;
         private System.Windows.Forms.TextBox messageTextBox;
         private System.Windows.Forms.TabPage tabPage1;
-        internal Bunifu.Framework.UI.BunifuFlatButton joinButton;
-        private Bunifu.Framework.UI.BunifuMetroTextbox channelTextBox;
         private System.Windows.Forms.Button connectButton;
         private System.Windows.Forms.Label connectionStateLabel;
         private System.Windows.Forms.Label constConnectionStateLabel;
         private System.Windows.Forms.Label label2;
         public System.Windows.Forms.TabControl tabControl;
-        private Bunifu.Framework.UI.BunifuFlatButton openConfigFolderButton;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label1;
-        private Bunifu.Framework.UI.BunifuMetroTextbox OATokenTextBox;
-        private Bunifu.Framework.UI.BunifuMetroTextbox UsernameTextBox;
+        private System.Windows.Forms.TextBox channelTextBox;
+        private System.Windows.Forms.TextBox UsernameTextBox;
+        private System.Windows.Forms.Button joinButton;
+        private System.Windows.Forms.Button openConfigFolderButton;
+        private System.Windows.Forms.TextBox OATokenTextBox;
 
         public static System.Windows.Forms.Timer Timer => singleton.timer;
     }
