@@ -262,7 +262,7 @@ namespace TwitchBot
 
         public void Unload(DesktopStorage storage)
         {
-            using (var file = new StreamWriter(storage.GetStream("Generic Commans.json", FileAccess.Write)))
+            using (var file = new StreamWriter(storage.GetStream("Generic Commans.json", FileAccess.Write, FileMode.OpenOrCreate)))
             {
                 file.Flush();
                 file.Write(JsonConvert.SerializeObject(CommandsListBox.Items));
