@@ -267,6 +267,9 @@ namespace TwitchBot
 
         internal static void HandleMessage(object sender, ChannelMessageEventArgs msg)
         {
+
+            DialogWindow.AddMessage($"{msg.Channel} => {msg.Badge.DisplayName}: {msg.Message}");
+
             #region DustSection
             if (BotEntry.RedstoneDust.ContainsKey(msg.From))
             {
@@ -362,7 +365,6 @@ namespace TwitchBot
             /// rather an object stating if the command executed successfully)
             var result = commands.ExecuteAsync(context, argPos, services);
 
-            DialogWindow.AddMessage($"{msg.Channel} => {msg.Badge.DisplayName}: {msg.Message}");
 
 
             if (!result.Result.IsSuccess)
@@ -393,7 +395,7 @@ namespace TwitchBot
             Thread.Sleep(500);
             client.JoinChannel(Channel);
             Thread.Sleep(500);
-            client.JoinChannel($"#kindredthebot");
+            client.JoinChannel($"#{Config.Get<string>(BotSetting.Username)}");
             Thread.Sleep(500);
             client.JoinChannel(ChatBotChannel);
         }
