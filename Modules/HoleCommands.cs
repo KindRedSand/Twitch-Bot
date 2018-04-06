@@ -9,6 +9,7 @@ using TwitchBot;
 
 namespace TwitchBot.Modules
 {
+    [LowLatency]
     public class HoleCommands : ModuleBase<CommandContext>
     {
         public static string[] night = new string[] { "@{username} прощается со всеми. Пожелаем ему наконец проснуться!",

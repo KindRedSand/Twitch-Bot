@@ -58,6 +58,9 @@
             this.constConnectionStateLabel = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.tabControl = new System.Windows.Forms.TabControl();
+            this.label4 = new System.Windows.Forms.Label();
+            this.botChannelTextBox = new System.Windows.Forms.TextBox();
+            this.chatRoomsListBox = new System.Windows.Forms.ListBox();
             this.tabPage4.SuspendLayout();
             this.tabPage3.SuspendLayout();
             this.tabPage1.SuspendLayout();
@@ -220,6 +223,9 @@
             // tabPage1
             // 
             this.tabPage1.BackColor = System.Drawing.Color.White;
+            this.tabPage1.Controls.Add(this.chatRoomsListBox);
+            this.tabPage1.Controls.Add(this.botChannelTextBox);
+            this.tabPage1.Controls.Add(this.label4);
             this.tabPage1.Controls.Add(this.openConfigFolderButton);
             this.tabPage1.Controls.Add(this.OATokenTextBox);
             this.tabPage1.Controls.Add(this.UsernameTextBox);
@@ -361,6 +367,33 @@
             this.tabControl.Size = new System.Drawing.Size(1008, 561);
             this.tabControl.TabIndex = 0;
             // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.BackColor = System.Drawing.Color.Transparent;
+            this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.label4.Location = new System.Drawing.Point(7, 165);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(97, 20);
+            this.label4.TabIndex = 18;
+            this.label4.Text = "Bot Channel";
+            // 
+            // botChannelTextBox
+            // 
+            this.botChannelTextBox.Location = new System.Drawing.Point(107, 165);
+            this.botChannelTextBox.Name = "botChannelTextBox";
+            this.botChannelTextBox.Size = new System.Drawing.Size(344, 20);
+            this.botChannelTextBox.TabIndex = 19;
+            // 
+            // chatRoomsListBox
+            // 
+            this.chatRoomsListBox.FormattingEnabled = true;
+            this.chatRoomsListBox.Location = new System.Drawing.Point(107, 191);
+            this.chatRoomsListBox.Name = "chatRoomsListBox";
+            this.chatRoomsListBox.Size = new System.Drawing.Size(344, 186);
+            this.chatRoomsListBox.TabIndex = 20;
+            this.chatRoomsListBox.SelectedIndexChanged += new System.EventHandler(this.chatRoomsListBox_SelectedIndexChanged);
+            // 
             // DialogWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -410,6 +443,9 @@
         private System.Windows.Forms.Button joinButton;
         private System.Windows.Forms.Button openConfigFolderButton;
         private System.Windows.Forms.TextBox OATokenTextBox;
+        private System.Windows.Forms.ListBox chatRoomsListBox;
+        private System.Windows.Forms.TextBox botChannelTextBox;
+        private System.Windows.Forms.Label label4;
 
         public static System.Windows.Forms.Timer Timer => singleton.timer;
     }

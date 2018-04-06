@@ -1,19 +1,41 @@
-﻿using System;
+﻿using BlockBreaker.App.Main.Utils.MathUtils;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TwitchBot.Commands;
 using TwitchBot.Redstone;
 
 namespace SnowModule.Items
 {
-    class DirtBall : Item
+    class DirtBall : Item, ITossableItem
     {
         public override string Name => "Dirtball";
 
         public override int Price => -1;
 
         public override IEnumerable<string> PurchaseAliases => new string[] { "комок грязи", "dirt ball", "dirt", "грязь" };
+
+        public int Delay => 4;
+
+        public void BeforeShoot(ICommandContext Context)
+        {
+            Context.Channel.SendMessage("/me заряжает снегомёт комком грязи");
+        }
+
+        public void Shoot(ICommandContext Context, string target)
+        {
+            int rnd = RNG.Next(0, 6);
+            if (rnd >= 2)
+            {
+                Context.Channel.SendMessage($"Бам, комок грязи от @{Context.User.Nick} прилетел прямо в лицо {target}");
+            }
+            else
+            {
+                Context.Channel.SendMessage($"Бам, комок грязи от @{Context.User.Nick} так и не достиг {target}");
+            }
+        }
 
         public override string GetPurchaseString(int am)
         {

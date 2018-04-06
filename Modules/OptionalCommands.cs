@@ -10,7 +10,8 @@ using TwitchBot;
 
 namespace TwitchBot.Modules
 {
-    public class OptionlCommands : ModuleBase<CommandContext>
+    [LowLatency(5)]
+    public class OptionalCommands : ModuleBase<CommandContext>
     {
         [Command("roll"), Summary("Выкинуть случайное число. !roll [максимальное число. По умолчанию = 6]")]
         public async Task Roll(int max = 6)

@@ -1,4 +1,6 @@
 ﻿using Newtonsoft.Json;
+using RazorwingGL.Framework.Extensions.ExceptionExtensions;
+using RazorwingGL.Framework.IO.Network;
 using RazorwingGL.Framework.Logging;
 using RazorwingGL.Framework.Online.API;
 using RazorwingGL.Framework.Platform;
@@ -39,6 +41,7 @@ namespace TwitchBot
             UsernameTextBox.Text = BotEntry.Config.Get<string>(Config.BotSetting.Username);
             Token = OAuthToken.Parse(BotEntry.Config.Get<string>(Config.BotSetting.SuperSecretSettings));
             OATokenTextBox.Text = Token.AccessToken ?? string.Empty;
+            botChannelTextBox.Text = BotEntry.ChatBotChannel.Value;
             BotEntry.NonCommandMessage += (IRCClient.ChannelMessageEventArgs msg) =>
             {
                 Actions.Add(() =>
@@ -66,6 +69,45 @@ namespace TwitchBot
                             BotEntry.client.SendMessage(msg.Channel, output);
                             Logger.Log($"[GENERIC] [{arr[0]}] command executed for |{msg.Badge.DisplayName}|");
                         }
+                    }
+                });
+            };
+
+            BotEntry.client.RoomStateChanged += (s, b) =>
+            {
+                Actions.Add(() =>
+                {
+                    if (BotEntry.client.CurrentChannelBadge != null && b == BotEntry.client.CurrentChannelBadge)
+                    {
+                        var areq = new JsonWebRequest<RoomModels>($"https://api.twitch.tv/kraken/chat/{BotEntry.client.CurrentChannelBadge.ChannelID}/rooms")
+                        {
+                            Method = HttpMethod.GET
+                        };
+                        areq.AddHeader("Accept", "application/vnd.twitchtv.v5+json");
+                        areq.AddHeader("Client-ID", "i5ezz567chrsv4rzal4l9q7kuuq9qv");
+                        areq.AddHeader("Authorization", "OAuth 5egkvsbduc7frz4lbhyw4u239bv7sr");
+
+                        areq.Finished += () =>
+                        {
+                            //var str = areq.ResponseString;
+
+                            Actions.Add(() => 
+                            {
+                                chatRoomsListBox.Items.Clear();
+                                foreach (var it in areq.ResponseObject.Rooms)
+                                {
+                                    chatRoomsListBox.Items.Add(it);
+                                }
+                            });
+                        };
+                        areq.Failed += (e) =>
+                        {
+                            ExceptionExtensions.Rethrow(e);
+                        };
+
+                        areq.PerformAsync();
+
+
                     }
                 });
             };
@@ -100,6 +142,8 @@ namespace TwitchBot
                 connectButton.Enabled = true;
                 this.Text = "Twitch bot API. State: [Connected]";
             }
+
+
         }
 
         private void ChatListBox_DoubleClick(object sender, EventArgs e)
@@ -297,9 +341,12 @@ namespace TwitchBot
             {
                 singleton.chattersListBox.Items.Clear();
                 var range = s.chatters.viewers;
+                range.Add("//Moderators===========");
                 range.AddRange(s.chatters.moderators);
 
-                singleton.chattersListBox.Items.AddRange(new ListBox.ObjectCollection(singleton.chattersListBox, range.ToArray()));
+                var li = new ListBox.ObjectCollection(singleton.chattersListBox, range.ToArray());
+
+                //singleton.chattersListBox.Items.AddRange();
             });
         }
 
@@ -313,11 +360,13 @@ namespace TwitchBot
             if (channelTextBox.Text != string.Empty)
             {
                 if (BotEntry.Channel != "#kindredthebot")
-                    BotEntry.client.PartChannel(BotEntry.Channel);
-                if (BotEntry.Channel.Value[0] != '#')
+                    BotEntry.client.PartChannel(BotEntry.Channel.Value);
+                if (channelTextBox.Text.ToLower()[0] != '#')
                     BotEntry.Channel.Value = "#" + channelTextBox.Text.ToLower();
-                channelTextBox.Text = string.Empty;
-                BotEntry.client.JoinChannel(BotEntry.Channel);
+                else BotEntry.Channel.Value = channelTextBox.Text.ToLower();
+                channelTextBox.Text = BotEntry.Channel.Value;
+                BotEntry.client.JoinChannel(BotEntry.Channel.Value);
+                BotEntry.GetUserListTimout = DateTimeOffset.Now;
             }
         }
 
@@ -334,6 +383,16 @@ namespace TwitchBot
         private void UsernameTextBox_TextChanged(object sender, EventArgs e)
         {
 
+        }
+
+        private void chatRoomsListBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            var arr = chatRoomsListBox.SelectedItem.ToString().Split(':');
+            string channel = $"#chatrooms:{arr[0]}:{arr[1]}";
+            BotEntry.client.PartChannel(BotEntry.ChatBotChannel.Value);
+            BotEntry.ChatBotChannel.Value = channel;
+            BotEntry.client.JoinChannel(BotEntry.ChatBotChannel.Value);
+            botChannelTextBox.Text = BotEntry.ChatBotChannel.Value;
         }
     }
 }

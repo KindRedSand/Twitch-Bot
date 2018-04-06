@@ -309,6 +309,10 @@ namespace TwitchBot.Modules.Dust
             BotEntry.RegisterItem<Piston>();
 
             BotEntry.OnTickActions += OnTick;
+            BotEntry.OnExiting += () => 
+            {
+                Config.Save();
+            };
         }
 
         private static DateTimeOffset DustRecalculateTime = DateTimeOffset.Now;
@@ -330,7 +334,7 @@ namespace TwitchBot.Modules.Dust
                         return;
                     }
 
-                    var lreq = new JsonWebRequest<ChatData>($"https://tmi.twitch.tv/group/Context.User/{BotEntry.Channel.Value.Replace("#", "")}/chatters");
+                    var lreq = new JsonWebRequest<ChatData>($"https://tmi.twitch.tv/group/user/{BotEntry.Channel.Value.Replace("#", "")}/chatters");
 
                     lreq.Finished += () =>
                     {
@@ -396,6 +400,11 @@ namespace TwitchBot.Modules.Dust
                             file.Write(JsonConvert.SerializeObject(BotEntry.RedstoneDust));
                         }
 
+                    };
+
+                    lreq.Failed += (e) =>
+                    {
+                        var ex = e;
                     };
 
                     lreq.PerformAsync();

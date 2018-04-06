@@ -13,7 +13,7 @@ namespace DustModule
 
         protected override void InitialiseDefaults()
         {
-            Set(DustConfigEnum.GainTime, 600, 60, 99999);
+            Set(DustConfigEnum.GainTime, 600, 20, 99999);
             Set(DustConfigEnum.SubMul, 2, 1, 100);
         }
 

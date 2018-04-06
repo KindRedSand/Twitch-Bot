@@ -330,7 +330,7 @@ namespace TwitchBot.Modules.Votes
                 //ReplyAsync($"@{Context.User.Nick} Во время голосования смайлами это недоступно");
             }
 
-            if (i > VoteCommands.StandartVariants.Count +1)
+            if (i > VoteCommands.StandartVariants.Count)
             {
                 return;
             }

@@ -82,9 +82,16 @@ namespace TwitchBot
         public static event Action OnTickActions;
 
         /// <summary>
+        /// Fired when form is closing
+        /// </summary>
+        public static event Action OnExiting;
+
+        /// <summary>
         /// Internal form
         /// </summary>
         private static DialogWindow Form;
+
+        internal static DateTimeOffset GetUserListTimout = DateTimeOffset.Now;
 
         [STAThread]
         static void Main(string[] args)
@@ -98,8 +105,6 @@ namespace TwitchBot
 
             try
             {
-                DateTimeOffset getUserListTimout = DateTimeOffset.Now;
-
                 ///Load bot configuration
                 Config = new BotConfiguration(Storage = new WindowsStorage("FoxBot"));
                 Channel = Config.GetBindable<string>(BotSetting.Channel);
@@ -134,7 +139,7 @@ namespace TwitchBot
                     while (!interrupt)
                     {
                         ///update
-                        if (DateTimeOffset.Now > getUserListTimout)
+                        if (DateTimeOffset.Now > GetUserListTimout)
                         {
                             var req = new JsonWebRequest<ChatData>($"https://tmi.twitch.tv/group/user/{Channel.Value.Replace("#", "")}/chatters");
 
@@ -155,7 +160,7 @@ namespace TwitchBot
                             ///In case not block current thread
                             req.PerformAsync();
 
-                            getUserListTimout = getUserListTimout.AddMinutes(5);
+                            GetUserListTimout = GetUserListTimout.AddMinutes(5);
                         }
 
                         OnTickActions?.Invoke();
@@ -216,6 +221,7 @@ namespace TwitchBot
                     }
                 }
 
+
                 ///Run form
                 Application.Run(Form);
 
@@ -228,10 +234,11 @@ namespace TwitchBot
                 Thread.Sleep(1000);
 
                 ///Unload all data and exit
-                //Logger.Log($"====================UNLOADING SERVICES=====================");
-                //client.Disconnect();
-                /////Commands.CommandsService.Unload(Storage);
-                //Logger.Log($"=================UNLOADING SERVICES ENDED==================");
+                Logger.Log($"====================UNLOADING SERVICES=====================");
+                OnExiting?.Invoke();
+                client.Disconnect();
+                ///Commands.CommandsService.Unload(Storage);
+                Logger.Log($"=================UNLOADING SERVICES ENDED==================");
 
                 ///Prepare item metadata to unloading
                 foreach (var data in RedstoneDust)
@@ -325,7 +332,7 @@ namespace TwitchBot
             /// If user want some help: read a Summary atribute for commands and reply it
             if (msg.HasStringPrefix("!help", ref argPos))
             {
-                if(msg.Message.Substring(argPos).Length > 2)
+                if(msg.Message.Substring(argPos).Length >= 1)
                 {
                     var info = commands.Search(context, argPos + 1);
                     if (info.Commands.Count != 0)
@@ -337,7 +344,7 @@ namespace TwitchBot
                     }
                 }else
                 {
-                    var text = "";
+                    var text = new List<string> { };
                     foreach (var it in commands.Commands)
                     {
                         bool pass = false;
@@ -349,13 +356,32 @@ namespace TwitchBot
                         }
                         if (pass)
                             continue;
-                        text += it.Name + ", ";
+                        if (it.Module.Group != null)
+                        {
+                            if (!text.Contains($"{it.Module.Group} {it.Name}"))
+                                text.Add($"{it.Module.Group} {it.Name}");
+                        }
+                        else
+                        {
+                            if (!text.Contains($"{it.Name}"))
+                                text.Add($"{it.Name}");
+                        }
+
                     }
-                    if (text.Length > 2)
-                        text.Substring(0, text.Length - 2);
+                    //if (text.Length > 2)
+                    //text.Substring(0, text.Length - 2);
+                    //else return;
+                    var str = "";
+                    foreach(var cmd in text)
+                    {
+                        str += $"{cmd}, ";
+                    }
+                    if (str.Length > 2)
+                        str = str.Substring(0, str.Length - 2) + ".";
                     else return;
 
-                    client.SendMessage(msg.Channel, text + "Используйте !help <команда> для дополнительных сведений");
+
+                    client.SendMessage(msg.Channel, str + " Используйте !help <команда> для дополнительных сведений");
 
                 }
 

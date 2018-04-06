@@ -60,81 +60,29 @@ namespace TwitchBot.Modules.Snow
         [Command("toss"), Alias("кинуть", "метнуть"), Summary("Кинуть предмет в кого-то")]
         public async Task Toss(Item item, string target)
         {
-            if (item.Name.Contains("Dirtball", "shoe", "Snowball"))
+            if (item is ITossableItem)
             {
-                switch(item.Name)
+                var itm = Context.User.Dust.GetItem(item.GetType());
+                
+                if (itm.Amouth > 0)
                 {
-                    case "Dirtball":
-                        if (Context.User.Dust.GetItem<DirtBall>() > 0)
-                            Task.Run(() =>
-                            {
-                                Context.User.Dust.GetItem<DirtBall>().Amouth -= 1;
-                                Reply("/me заряжает снегомёт комком грязи");
-                                Thread.Sleep(3000);
-                                //SendMessage($"Бам, комок грязи от @{User.Nick} прилетел прямо в лицо {target}");
-                                int rnd = RNG.Next(0, 6);
-                                if (rnd >= 2)
-                                {
-                                    Reply($"Бам, комок грязи от @{Context.User.Nick} прилетел прямо в лицо {target}");
-                                }
-                                else
-                                {
-                                    Reply($"Бам, комок грязи от @{Context.User.Nick} так и не достиг {target}");
-                                }
-
-                            });
-                        return;
-                        break;
-                    case "shoe":
-                        if (Context.User.Dust.GetItem<Shoe>() > 0)
-                            Task.Run(() =>
-                            {
-                                Context.User.Dust.GetItem<DirtBall>().Amouth -= 1;
-                                Reply("/me заряжает снегомёт тапком...");
-                                Thread.Sleep(3000);
-
-                                int rnd = RNG.Next(0, 6);
-                                if (rnd >= 3)
-                                {
-                                    Reply($"Бам, отменный тапок от @{Context.User.Nick} прилетел прямо в лицо {target}");
-                                }
-                                else if (rnd == 2)
-                                {
-                                    Reply($"Бам, тапок от @{Context.User.Nick} пролетел по касательной прямо перед лицом {target}");
-                                }
-                                else
-                                {
-                                    Reply($"Бам, тапок от @{Context.User.Nick} полетел... полетел.. мимо? Лицо {target} осталось невредимым PogChamp");
-                                }
-
-                            });
-                        break;
-                    case "Snowball":
-                        if (Context.User.Dust.GetItem<Snowball>() > 0)
-                            Task.Run(() =>
-                            {
-                                Context.User.Dust.GetItem<Snowball>().Amouth -= 1;
-                                Reply("/me заряжает снегомёт снежком");
-                                Thread.Sleep(3000);
-                                //SendMessage($"Бам, снежок @{User.Nick} прилетел прямо в лицо {target}");
-                                int rnd = RNG.Next(0, 6);
-                                if (rnd >= 3)
-                                {
-                                    Reply($"Бам, снежок @{Context.User.Nick} прилетел прямо в лицо {target}");
-                                }
-                                else if (rnd == 2)
-                                {
-                                    Reply($"Бам, снежок @{Context.User.Nick} прилетел прямо в лицо {target} заморозив территорию вокруг. Шанс уворота снижен вдвое! 4Head");
-                                }
-                                else
-                                {
-                                    Reply($"Бам, снежок @{Context.User.Nick} так и не достиг {target} ...");
-                                }
-                            });
-                        break;
-
+                    itm -= 1;
                 }
-            }else
+                else
+                {
+                    Reply($"@{Context.User.Nick} У вас нет {itm.GetPurchaseString(1)} в инвентаре!");
+                    return;
+                }
+                var tos = item as ITossableItem;
+
+                Task.Run(() =>
+                {
+                    tos.BeforeShoot(Context);
+                    Thread.Sleep(tos.Delay * 1000);
+                    tos.Shoot(Context, target);
+                });
+                return;
+            }
             {
                 Reply($"@{Context.User.Nick} нельзя просто взять и запихнуть {item.GetPurchaseString(1)} в снегомёт");
             }

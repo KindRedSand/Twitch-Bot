@@ -13,11 +13,17 @@ namespace TwitchBot.API
             get
             {
                 var list = new List<string> { };
-                if (ChannelID[0] != '#' || !BotEntry.ChannelsChatters.ContainsKey(ChannelID))
-                    return list;
+                ///Use later...
+                //if (ChannelID[0] != '#' || !BotEntry.ChannelsChatters.ContainsKey(ChannelID))
+                //    return list;
 
-                list.AddRange(BotEntry.ChannelsChatters[ChannelID].viewers);
-                list.AddRange(BotEntry.ChannelsChatters[ChannelID].moderators);
+                //list.AddRange(BotEntry.ChannelsChatters[ChannelID].viewers);
+                //list.AddRange(BotEntry.ChannelsChatters[ChannelID].moderators);
+
+                if(BotEntry.ChannelsChatters.ContainsKey(BotEntry.Channel))
+                {
+                    list.AddRange(BotEntry.ChannelsChatters[BotEntry.Channel].viewers);
+                }
 
                 return list;
             }

@@ -221,7 +221,8 @@ namespace RazorwingGL.Framework.Configuration
 
         public bool Save()
         {
-            if (!hasUnsavedChanges || string.IsNullOrEmpty(Filename)) return true;
+            if (!hasUnsavedChanges || string.IsNullOrEmpty(Filename))
+                return true;
 
             try
             {

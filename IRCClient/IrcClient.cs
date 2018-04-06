@@ -311,7 +311,7 @@ namespace TwitchBot.IRCClient
                     if (inputLine[0] != '@')
                         ProcessData(inputLine, new Badge());
                     else
-                        ParseBagedData(inputLine, out Badge badge);
+                        ParseBagedData(inputLine);
                     //if (_consoleOutput) Console.WriteLine(inputLine);
                 }
                 catch (Exception ex)
@@ -322,41 +322,90 @@ namespace TwitchBot.IRCClient
             ConnectionClosed?.Invoke(this, new EventArgs());
         }
 
+        public Action<string, RoomStateBadge> RoomStateChanged;
+
+        public RoomStateBadge CurrentChannelBadge;
+
         private Logger log = Logger.GetLogger(LoggingTarget.Network);
-        private void ParseBagedData(string data, out Badge badge)
+        private void ParseBagedData(string data)
         {
             // split the data into parts
             string[] ircData = data.Split(' ');
 
             var ircCommand = ircData[2];
-            badge = new Badge(false);
             var tagString = ircData[0].Substring(8);
             var tags = tagString.Split(';');
-            foreach (var it in tags)
+
+            if (ircCommand == "ROOMSTATE")
             {
-                var pair = it.Split('=');
-                switch (pair[0])
+                tagString = ircData[0].Substring(1);
+                //@broadcaster-lang=;emote-only=0;followers-only=-1;r9k=0;rituals=0;room-id=30773965;slow=0;subs-only=0 :tmi.twitch.tv ROOMSTATE #redcrafting
+                var badge = new RoomStateBadge();
+                foreach (var it in tags)
                 {
-                    case "display-name":
-                        badge.DisplayName = pair[1];
-                        break;
-                    case "subscriber":
-                        if (pair[1] == "1")
-                            badge.sub = true;
-                        break;
-                    case "turbo":
-                        if (pair[1] == "1")
-                            badge.turbo = true;
-                        break;
-                    case "mod":
-                        if (pair[1] == "1")
-                            badge.mod = true;
-                        break;
+                    var pair = it.Split('=');
+                    switch (pair[0])
+                    {
+                        case "broadcaster-lang":
+                            badge.BroadcasterLang = pair[1];
+                            break;
+                        case "followers-only":
+                            if (pair[1] == "1")
+                                badge.FollowersOny = true;
+                            break;
+                        case "r9k":
+                            if (pair[1] == "1")
+                                badge.r9k = true;
+                            break;
+                        case "slow":
+                            if (pair[1] == "1")
+                                badge.SlowMode = true;
+                            break;
+                        case "subs-only":
+                            if (pair[1] == "1")
+                                badge.SubChat = true;
+                            break;
+                        case "room-id":
+                            badge.ChannelID = pair[1];
+                            break;
+                    }
+                }
+                if (ircData[3] == BotEntry.Channel)
+                {
+                    CurrentChannelBadge = badge;
+                }
+                RoomStateChanged?.Invoke(data, badge);
+            }else
+            {
+                var badge = new Badge(false);
+                foreach (var it in tags)
+                {
+                    var pair = it.Split('=');
+                    switch (pair[0])
+                    {
+                        case "display-name":
+                            badge.DisplayName = pair[1];
+                            break;
+                        case "subscriber":
+                            if (pair[1] == "1")
+                                badge.sub = true;
+                            break;
+                        case "turbo":
+                            if (pair[1] == "1")
+                                badge.turbo = true;
+                            break;
+                        case "mod":
+                            if (pair[1] == "1")
+                                badge.mod = true;
+                            break;
+                    }
                 }
 
+
+                ProcessData(data, badge);
             }
 
-            ProcessData(data, badge);
+
 
         }
 
@@ -573,6 +622,8 @@ namespace TwitchBot.IRCClient
         /// <param name="message">Message to send</param>
         private void Send(string message)
         {
+            if (writer == null)
+                return;
             writer.WriteLine(message);
             writer.Flush();
 
