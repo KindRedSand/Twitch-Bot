@@ -46,25 +46,25 @@ namespace TwitchBot.Modules
 
 
         [Command("artel"), Alias("артел")]
-        public async Task Artel()
+        public async Task Artel(params string[] s)
         {
             Reply("Не паникуем. Артел свалил в Австралию, ему не до кубов.");
         }
 
         [Command("hole"), Alias("яма")]
-        public async Task Hole()
+        public async Task Hole(params string[] s)
         {
             Reply("Praise the Hole!!!!!1!11!1");
         }
 
         [Command("praise"), Alias("восславь", "солнце", "sun")]
-        public async Task Sun()
+        public async Task Sun(params string[] s)
         {
             Reply($"Восславь солнце! \\[T]/ @{Context.User}");
         }
 
         [Command("ret"), Summary("Заявить о себе после ухода.")]
-        public async Task PerformReturn()
+        public async Task PerformReturn(params string[] s)
         {
             if (ByeMentioned.ContainsKey(Context.User.Username))
             {
@@ -77,7 +77,7 @@ namespace TwitchBot.Modules
         }
 
         [Command("bb"), Alias("бб", "пока", "byeall", "bye"), Summary("Сказать всем что ты покидаешь чатик. Используйте !ret что бы заявить о своём возвращении")]
-        public async Task PerformBye()
+        public async Task PerformBye(params string[] s)
         {
             if (ByeMentioned.ContainsKey(Context.User.Username))
             {

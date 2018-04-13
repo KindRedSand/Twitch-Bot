@@ -260,6 +260,7 @@ namespace TwitchBot.Modules.Dust
             if (item.Price <= 0)
             {
                 Reply($"Предмет {item.GetPurchaseString(1)} не продаётся!");
+                return;
             }
 
             if (amouth * item.Price > Context.User.Dust.Dust)

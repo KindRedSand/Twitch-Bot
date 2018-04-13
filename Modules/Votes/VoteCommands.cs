@@ -28,6 +28,10 @@ namespace TwitchBot.Modules.Votes
 
         public static Channel StartChannel;
 
+        public static bool SubOnly = false;
+
+        const string subonlytext = "только для сабов";
+
         [Command("start"), Alias("начать"), Summary("Начать обычное голосование. Использование: !vote start <время в секундах> <Условие в \"кавычках\"> <Первый вариант в \"кавычках\"> <Второй вариант в \"кавычках\"> [Третий и прочие варианты каждый в \"кавычках\"]")]
         public async Task StartVote(int seconds, string cond, string var1, string var2, params string[] vars)
         {
@@ -58,6 +62,17 @@ namespace TwitchBot.Modules.Votes
                 }
             }
 
+            SubOnly = false;
+
+            if (cond.Length > 2)
+            {
+                if (cond[0] == '-' && cond[1] == 's')
+                {
+                    SubOnly = true;
+                    cond = cond.Substring(2);
+                }
+            }
+
             Condition = cond;
 
             StandartVariants.Clear();
@@ -71,8 +86,9 @@ namespace TwitchBot.Modules.Votes
                 StandartVariants.Add(i, it);
                 i++;
             }
+            string data = SubOnly ? subonlytext : "";
 
-            string text = $"@{Context.User.Nick} Голосование начато: {Condition}, Варианты: ";
+            string text = $"@{Context.User.Nick} Голосование {data} начато: {Condition}, Варианты: ";
             for (i = 1; i < StandartVariants.Count() + 1; i++)
             {
                 text += $"{i}: {StandartVariants[i]} ";
@@ -119,6 +135,17 @@ namespace TwitchBot.Modules.Votes
                 }
             }
 
+            SubOnly = false;
+
+            if (cond.Length > 2)
+            {
+                if (cond[0] == '-' && cond[1] == 's')
+                {
+                    SubOnly = true;
+                    cond = cond.Substring(2);
+                }
+            }
+
             Condition = cond;
 
             EmojiVariants.Clear();
@@ -151,8 +178,10 @@ namespace TwitchBot.Modules.Votes
                 }
                 return;
             }
+            string data = SubOnly ? subonlytext : "";
 
-            string text = $"@{Context.User.Nick} Голосование смайлами начато: {Condition}, Варианты: ";
+
+            string text = $"@{Context.User.Nick} Голосование смайлами {data} начато: {Condition}, Варианты: ";
             foreach (var it in EmojiVariants)
             {
                 text += $"[ {it.Key} => {it.Value}]";
@@ -296,6 +325,12 @@ namespace TwitchBot.Modules.Votes
                 return;
                 //ReplyAsync($"@{Context.User.Nick} Во время голосования смайлами это недоступно");
             }
+            if (SubOnly)
+            {
+                if (!msg.Badge.sub)
+                    return;
+            }
+
             var arr = msg.Message.Split(' ');
 
             if (VoteCommands.EmojiVariants.ContainsKey(arr[0]))
@@ -333,6 +368,11 @@ namespace TwitchBot.Modules.Votes
             if (i > VoteCommands.StandartVariants.Count)
             {
                 return;
+            }
+            if (VoteCommands.SubOnly)
+            {
+                if (!Context.User.HasSubscribe)
+                    return;
             }
 
             if (VoteCommands.StandartVotes.ContainsKey(Context.User.Username))

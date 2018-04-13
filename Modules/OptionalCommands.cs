@@ -28,7 +28,7 @@ namespace TwitchBot.Modules
         }
 
         [Command("uptime"), Alias("time", "время"), Summary("Выводит время которое стрим уже работает")]
-        public async Task Uptime()
+        public async Task Uptime(params string[] sttt)
         {
             using (WebRequest req = new WebRequest($@"https://beta.decapi.me/twitch/uptime/{BotEntry.Channel.Value.Substring(1, BotEntry.Channel.Value.Length - 1)}"))
             {

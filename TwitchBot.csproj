@@ -136,7 +136,7 @@
     <Compile Include="Modules\Dust\Items\Piston.cs" />
     <Compile Include="Modules\Dust\Items\RedstoneTorch.cs" />
     <Compile Include="Modules\HoleCommands.cs" />
-    <Compile Include="Modules\OptionlCommands.cs" />
+    <Compile Include="Modules\OptionalCommands.cs" />
     <Compile Include="Modules\Snow\Items\DirtBall.cs" />
     <Compile Include="Modules\Snow\Items\ITossableItem.cs" />
     <Compile Include="Modules\Snow\Items\Shoe.cs" />

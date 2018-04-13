@@ -58,7 +58,7 @@ namespace TwitchBot.Modules.Snow
         }
 
         [Command("toss"), Alias("кинуть", "метнуть"), Summary("Кинуть предмет в кого-то")]
-        public async Task Toss(Item item, string target)
+        public async Task Toss(Item item, params string[] target)
         {
             if (item is ITossableItem)
             {
@@ -75,11 +75,24 @@ namespace TwitchBot.Modules.Snow
                 }
                 var tos = item as ITossableItem;
 
+                var str = string.Join(" ", target);
+
+                foreach(var it in Context.Channel.Moderators)
+                {
+                    if (str.ToLower().Contains(it.ToLower()))
+                    {
+                        Reply($"{str} защищён неведомой магией, и потомоу {item.GetPurchaseString(1)} отскочил прямо в лицо @{Context.User.Nick}");
+                        return;
+                    }
+                }
+
+
+
                 Task.Run(() =>
                 {
                     tos.BeforeShoot(Context);
                     Thread.Sleep(tos.Delay * 1000);
-                    tos.Shoot(Context, target);
+                    tos.Shoot(Context, str);
                 });
                 return;
             }

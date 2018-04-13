@@ -249,7 +249,7 @@ namespace TwitchBot
                 ///Unload dust data
                 using (var file = new StreamWriter(Storage.GetStream($"Dust/{BotEntry.Channel}#RedstoneData.json", FileAccess.ReadWrite, FileMode.Truncate)))
                 {
-                    file.Write(JsonConvert.SerializeObject(BotEntry.RedstoneDust));
+                    file.Write(JsonConvert.SerializeObject(BotEntry.RedstoneDust, Formatting.Indented));
                 }
 
                 Thread.Sleep(1000);
@@ -267,7 +267,7 @@ namespace TwitchBot
 
                 using (var file = new StreamWriter(Storage.GetStream($"Dust/{BotEntry.Channel}#RedstoneData.json", FileAccess.ReadWrite, FileMode.Truncate)))
                 {
-                    file.Write(JsonConvert.SerializeObject(BotEntry.RedstoneDust));
+                    file.Write(JsonConvert.SerializeObject(BotEntry.RedstoneDust, Formatting.Indented));
                 }
             }
         }
