@@ -77,6 +77,11 @@ namespace TwitchBot
         public static Action<ChannelMessageEventArgs> NonCommandMessage;
 
         /// <summary>
+        /// Called after all modules and items metadata has loaded
+        /// </summary>
+        public static Action PostInit;
+
+        /// <summary>
         /// Fired evervy tick
         /// </summary>
         public static event Action OnTickActions;
@@ -182,11 +187,7 @@ namespace TwitchBot
                         BotEntry.RedstoneDust = new SortedDictionary<string, RedstoneData> { };
                 }
 
-                ///Load items metadata
-                foreach (var data in RedstoneDust)
-                {
-                    data.Value.ReadJsonData();
-                }
+
 
                 ///Start update thread
                 updateThread.Start();
@@ -220,6 +221,14 @@ namespace TwitchBot
                         continue;
                     }
                 }
+
+                ///Load items metadata
+                foreach (var data in RedstoneDust)
+                {
+                    data.Value.ReadJsonData();
+                }
+
+                PostInit?.Invoke();
 
 
                 ///Run form

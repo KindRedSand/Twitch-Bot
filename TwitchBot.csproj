@@ -138,6 +138,7 @@
     <Compile Include="Modules\HoleCommands.cs" />
     <Compile Include="Modules\OptionalCommands.cs" />
     <Compile Include="Modules\Snow\Items\DirtBall.cs" />
+    <Compile Include="Modules\Snow\Items\Gag.cs" />
     <Compile Include="Modules\Snow\Items\ITossableItem.cs" />
     <Compile Include="Modules\Snow\Items\Shoe.cs" />
     <Compile Include="Modules\Snow\Items\Showel.cs" />

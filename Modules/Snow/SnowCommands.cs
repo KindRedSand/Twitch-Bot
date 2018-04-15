@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using TwitchBot.API.Commands;
 using TwitchBot.Commands;
 using TwitchBot.Commands.Builders;
 using TwitchBot.Redstone;
@@ -57,11 +58,68 @@ namespace TwitchBot.Modules.Snow
             }
         }
 
-        [Command("toss"), Alias("кинуть", "метнуть"), Summary("Кинуть предмет в кого-то")]
+        [Command("toss"), Alias("кинуть", "метнуть"), Summary("Кинуть предмет в кого-то"), LowLatency]
+        public async Task Toss(Item item, User target)
+        {
+            if (target == null)
+            {
+                Reply("Пользователь не зарегестрирован");
+                return;
+            }
+
+            if (item is ITossableItem)
+            {
+                var itm = Context.User.Dust.GetItem(item.GetType());
+
+                if (itm.Amouth > 0)
+                {
+                    itm -= 1;
+                }
+                else
+                {
+                    Reply($"@{Context.User.Nick} У вас нет {itm.GetPurchaseString(1)} в инвентаре!");
+                    return;
+                }
+                var tos = item as ITossableItem;
+
+                //var str = string.Join(" ", target);
+
+                foreach (var it in Context.Channel.Moderators)
+                {
+                    if (target.Username.Contains(it.ToLower()))
+                    {
+                        Reply($"{target.Nick} защищён неведомой магией, и потомоу {item.GetPurchaseString(1)} отскочил прямо в лицо @{Context.User.Nick}");
+                        return;
+                    }
+                }
+
+
+
+                Task.Run(() =>
+                {
+                    tos.BeforeShoot(Context);
+                    Thread.Sleep(tos.Delay * 1000);
+                    tos.Shoot(Context, target);
+                });
+                return;
+            }
+            {
+                Reply($"@{Context.User.Nick} нельзя просто взять и запихнуть {item.GetPurchaseString(1)} в снегомёт");
+            }
+        }
+
+        [Command("toss"), Alias("кинуть", "метнуть"), Summary("Кинуть предмет в кого-то"), LowLatency]
         public async Task Toss(Item item, params string[] target)
         {
             if (item is ITossableItem)
             {
+                var tos = item as ITossableItem;
+
+                if (tos.OnlyTargetUser)
+                {
+                    return;
+                }
+
                 var itm = Context.User.Dust.GetItem(item.GetType());
                 
                 if (itm.Amouth > 0)
@@ -73,7 +131,7 @@ namespace TwitchBot.Modules.Snow
                     Reply($"@{Context.User.Nick} У вас нет {itm.GetPurchaseString(1)} в инвентаре!");
                     return;
                 }
-                var tos = item as ITossableItem;
+
 
                 var str = string.Join(" ", target);
 
@@ -102,6 +160,8 @@ namespace TwitchBot.Modules.Snow
         }
 
 
+
+
         protected override void OnModuleBuilding(CommandService commandService, ModuleBuilder builder)
         {
             base.OnModuleBuilding(commandService, builder);
@@ -110,6 +170,7 @@ namespace TwitchBot.Modules.Snow
             TwitchBot.BotEntry.RegisterItem<Snowball>();
             TwitchBot.BotEntry.RegisterItem<DirtBall>();
             TwitchBot.BotEntry.RegisterItem<Shoe>();
+            BotEntry.RegisterItem<Gag>();
         }
     }
 }

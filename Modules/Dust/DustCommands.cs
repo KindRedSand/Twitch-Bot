@@ -37,6 +37,7 @@ namespace TwitchBot.Modules.Dust
 
             if (inventoryText != "")
             {
+                inventoryText = inventoryText.Substring(0, inventoryText.Length - 2);
                 Reply($"@{Context.User.Nick} У вас есть {inventoryText}");
             }
             else
@@ -366,39 +367,15 @@ namespace TwitchBot.Modules.Dust
                                 BotEntry.RedstoneDust[it].Dust += 1;
                                 BotEntry.RedstoneDust[it].Chatter = false;
                             }
+
+                            BotEntry.RedstoneDust[it].PrepareJsonData();
                         }
-                        foreach (var it in lreq.ResponseObject.chatters.moderators)
-                        {
-                            if (BotEntry.RedstoneDust.ContainsKey(it))
-                            {
-                                if (BotEntry.RedstoneDust[it].HasBoost)
-                                {
-                                    BotEntry.RedstoneDust[it].Dust += 1 * SubMultiply;
-                                }
-                                else
-                                {
-                                    BotEntry.RedstoneDust[it].Dust += 1;
-                                }
-                            }
-                            else
-                            {
-                                BotEntry.RedstoneDust.Add(it, new RedstoneData
-                                {
-                                    Dust = 1,
-                                    HasBoost = false,
-                                });
-                            }
-                            if (BotEntry.RedstoneDust[it].Chatter)
-                            {
-                                BotEntry.RedstoneDust[it].Dust += 1;
-                                BotEntry.RedstoneDust[it].Chatter = false;
-                            }
-                        }
+
 
 
                         using (var file = new StreamWriter(Storage.GetStream($"{BotEntry.Channel}#RedstoneData.json", FileAccess.ReadWrite, FileMode.Truncate)))
                         {
-                            file.Write(JsonConvert.SerializeObject(BotEntry.RedstoneDust));
+                            file.Write(JsonConvert.SerializeObject(BotEntry.RedstoneDust, Formatting.Indented));
                         }
 
                     };

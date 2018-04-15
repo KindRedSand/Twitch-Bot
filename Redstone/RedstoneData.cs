@@ -143,7 +143,7 @@ namespace TwitchBot.Redstone
 
         internal void PrepareJsonData()
         {
-            Dispose();
+            Dispose(false);
         }
 
         ~RedstoneData()
@@ -151,7 +151,7 @@ namespace TwitchBot.Redstone
             //Dispose();
         }
 
-        public void Dispose()
+        public void Dispose(bool isDisposing = false)
         {
             //throw new NotImplementedException();
             //serialiseItemData.Clear();
@@ -182,6 +182,11 @@ namespace TwitchBot.Redstone
             {
                 serialiseItemMetadata.Add(it.GetType().ToString(), new Tuple<int, string>(it.Amouth, it.SaveMetadata()));
             }
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
         }
     }
 

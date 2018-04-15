@@ -60,7 +60,7 @@ namespace TwitchBot.Modules
         [Command("praise"), Alias("восславь", "солнце", "sun")]
         public async Task Sun(params string[] s)
         {
-            Reply($"Восславь солнце! \\[T]/ @{Context.User}");
+            Reply($"Восславь солнце! \\[T]/ @{Context.User.Nick}");
         }
 
         [Command("ret"), Summary("Заявить о себе после ухода.")]

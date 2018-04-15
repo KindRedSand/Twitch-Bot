@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TwitchBot.Commands;
 using TwitchBot.Redstone;
+using TwitchBot.API.Commands;
 
 namespace SnowModule.Items
 {
@@ -18,6 +19,10 @@ namespace SnowModule.Items
         public override IEnumerable<string> PurchaseAliases => new string[] { "комок грязи", "dirt ball", "dirt", "грязь" };
 
         public int Delay => 4;
+
+        public bool OnlyTargetUser => false;
+
+        public bool HasReflectionAction => false;
 
         public void BeforeShoot(ICommandContext Context)
         {
@@ -69,6 +74,16 @@ namespace SnowModule.Items
                 default:
                     return $"{Amouth} комков грязи";
             }
+        }
+
+        public void Shoot(ICommandContext Context, User target)
+        {
+            Shoot(Context, target.Nick);
+        }
+
+        public void OnReflection(ICommandContext context, User target)
+        {
+            
         }
     }
 }
